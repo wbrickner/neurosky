@@ -12,7 +12,7 @@ const NeuroSky = require("neurosky")
 
 main()
 
-async function main() {
+function main() {
     const neurosky = new NeuroSky({
         host: "...",
         port: 13854,
