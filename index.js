@@ -1,5 +1,5 @@
-const { promisify } = require("util")
-const net = promisify(require("net"))
+// The lengths to which I will go to avoid callbacks...
+const connect = require("util").promisify(require("net").connect)
 const { EventEmitter } = require("events")
 
 class NeuroSky extends EventEmitter {
@@ -7,7 +7,7 @@ class NeuroSky extends EventEmitter {
      * Options: port, host, raw (defaults to true).
      * @param {Object} options 
      */
-    constructor(options = { autoReconnect = true }) {
+    constructor(options = { autoReconnect: true }) {
         this.port = options.port || 13854
         this.host = options.host || "localhost"
         this.autoReconnect = !!options.autoReconnect
@@ -102,7 +102,7 @@ class NeuroSky extends EventEmitter {
     async connect() {
         if (this.client) { return }
 
-        this.client = await net.connect(this.port, this.host)
+        this.client = await connect(this.port, this.host)
 
         this.client.on("data", this.onData)
         this.client.on("ready", this.onSocketReady)
